@@ -122,29 +122,30 @@ function CreateTestForm() {
       
       <div className="w-[70%] mx-auto p-4 border border-gray-200 rounded-lg flex:row mt-6">
         <h2 className="font-semibold text-2xl">Your Tests</h2>
-      {testArr.map((test, index) => (
-          <div className="w-full border rounded-lg flex mt-2">
-          <div className="p-4 w-[20%]">
-            <h3 className="font-semibold text-lg">Title : {test.test_title}</h3>
+        {testArr.map((test, index) => (
+          <div key={index} className="w-full border rounded-lg flex mt-2">
+            <div className="p-4 w-[20%]">
+              <h3 className="font-semibold text-lg">Title : {test.test_title}</h3>
+            </div>
+            <div className="p-4 w-[20%]">
+              <h3 className=" text-lg">Duration : {test.test_duration}</h3>
+            </div>
+            <div className="p-4 w-[20%]">
+              <h3 className=" text-lg">Total Marks : {test.test_total_marks}</h3>
+            </div>
+            <div className="p-4 w-[20%]">
+              <h3 className=" text-lg">No of Sections : {test.test_sections}</h3>
+            </div>
+            <div className="border-t p-4 flex items-center justify-end gap-2 w-[20%]">
+              <Button asChild className="bg-blue-400" variant="outline">
+              <Link href={`/addQuestion/${test.id}`}>
+                Add Questions
+              </Link>
+              </Button>
+            </div>
           </div>
-          <div className="p-4 w-[20%]">
-            <h3 className=" text-lg">Duration : {test.test_duration}</h3>
-          </div>
-          <div className="p-4 w-[20%]">
-            <h3 className=" text-lg">Total Marks : {test.test_total_marks}</h3>
-          </div>
-          <div className="p-4 w-[20%]">
-            <h3 className=" text-lg">No of Sections : {test.test_sections}</h3>
-          </div>
-          <div className="border-t p-4 flex items-center justify-end gap-2 w-[20%]">
-            <Button asChild className="bg-blue-400" variant="outline">
-             <Link href={`/addQuestion/${test.id}`}>
-               Add Questions
-             </Link>
-            </Button>
-          </div>
-        </div>
-        ))}
+      ))}
+
       </div>
       </div>
         
