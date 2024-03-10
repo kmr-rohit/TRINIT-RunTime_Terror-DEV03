@@ -16,6 +16,7 @@ export default function TestsList() {
     let { data: tests, error } = await supabase
       .from('tests')
       .select('*')
+      .eq('published', true)
 
     if (error) console.log("Error: ", error);
     else setTests(tests);

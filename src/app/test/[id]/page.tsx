@@ -38,6 +38,18 @@ export default function TestView() {
   const [score, setScore] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [session, setSession] = useState<Session|null>(null);
+  const [time, setTime] = useState(); // Convert hours to seconds
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(prevTime => prevTime - 1);
+    }, 1000);
+  
+    return () => clearInterval(timer); // Clear interval on unmount
+  }, []);
+  
+
+  
   useEffect(() => {
     
     supabase.auth.getSession()
@@ -85,6 +97,7 @@ export default function TestView() {
         console.error('Error fetching test:', error.message);
         return;
       }
+      setTime(data[0].test_duration * 60 * 60);
       setTest(data);
     }
 
@@ -111,6 +124,12 @@ export default function TestView() {
   const handleNextQuestion = () => {
     setCurrentQuestion(prev => Math.min(prev + 1, questions.length - 1));
   };
+  const formattedTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time - hours * 3600) / 60);
+    const seconds = time - hours * 3600 - minutes * 60;
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
   const handleSubmitTest = async () => {
 
@@ -119,12 +138,14 @@ export default function TestView() {
     const user_email = user?.email;
     // console.log("USER EMAIL: ", user_email);
     const {data }  = await supabase.from('users').select('attempted_tests').eq('email', user_email);
-    
+
     console.log("DATA: ", data);
-    const attempted_test_data = data[0].attempted_tests;
-
+    let attempted_test_data = [];
+    if(data.length != 0){
+       attempted_test_data = data[0].attempted_tests;
+    }
     const updated_attempted_tests = [...attempted_test_data, test_id];
-
+    console.log("UPDATED ATTEMPTED TESTS: ", updated_attempted_tests)
     const { error } = await supabase.from('users').update({attempted_tests: updated_attempted_tests}).eq('email', user_email);
 
     setIsSubmitted(true);
@@ -140,6 +161,7 @@ export default function TestView() {
         <>
           <Card className="w-[90%] md:w-[70%] mb-4 ml-4 ">
             <CardHeader className="pb-0">
+              <h2 className="text-2xl font-semibold">Remaining Time: {formattedTime(time)}</h2>
               <Button
                 className="bg-blue-500 text-white hover:bg-blue-600"
                 variant="outline"

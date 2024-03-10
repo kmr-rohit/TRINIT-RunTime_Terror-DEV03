@@ -10,7 +10,7 @@ export default function Home() {
       {/* <Dashboard /> */}
       {/* <TestView /> */}
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <Image src="/logo.svg" alt="My Test App" width={100} height={100} />
+        <Image src="https://assets.goodfirms.co/blog/general/1566798061-exam-online.jpg" alt="My Test App" width={100} height={100} />
         <h1 className="text-4xl font-semibold mt-4">Welcome to My Test App</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-2">The best platform to create and attempt tests</p>
         <div className="mt-8">

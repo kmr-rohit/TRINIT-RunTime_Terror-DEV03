@@ -81,7 +81,7 @@ export default function Dashboard() {
     .from('users')
     .select('*')
     .eq('email', session?.user.email)
-    // console.log("USERS: ", users)
+    console.log("USERS: ", users)
 
     users?.map(user => {
       setUser(user)

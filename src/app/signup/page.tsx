@@ -63,26 +63,23 @@ export default function SignUp() {
   const handleConfirmPasswordChange = (event) => setConfirmPassword(event.target.value);
   
   const handleSignUp = async () => {
-    // console.log(name,email,password,confirmPassword);
-
     if(password !== confirmPassword) {
-      // console.log('Password did not match');
-     setAlert({ msg: "Password did not match", type:"error" });
-     return ;
+      setAlert({ msg: "Password did not match", type:"error" });
+      return;
     }
-
-
-    const { data, error } = await supabase.auth.signUp({email, password});
-
+  
+    const { user, error } = await supabase.auth.signUp({email, password});
+  
     if(error) {
       setAlert({ msg: error.message, type:"error" });
       return;
     }
-
+  
     router.push('/login');
     setAlert({ msg: "Account Created Successfully", type:"info" });
     return;
   }
+  
 
   return (
     <div className="w-full py-12 grid gap-6 md:gap-12">
