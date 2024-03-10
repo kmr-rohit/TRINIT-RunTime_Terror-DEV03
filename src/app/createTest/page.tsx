@@ -93,93 +93,93 @@ function CreateTestForm() {
 
     console.log(extracteddata.ParsedResults[0].TextOverlay.Lines);
     const data = extracteddata.ParsedResults[0].TextOverlay.Lines;
-    const ques_corr = [];
-    for(let i = 0; i < data.length; i++) {
-      if(/^\d+\./.test(data[i].LineText)) {
-        ques_corr.push(data[i].MinTop);
-      }
-    }
-    console.log(ques_corr);
+    // const ques_corr = [];
+    // for(let i = 0; i < data.length; i++) {
+    //   if(/^\d+\./.test(data[i].LineText)) {
+    //     ques_corr.push(data[i].MinTop);
+    //   }
+    // }
+    // console.log(ques_corr);
     let questions = [];
     let currentQuestion = "";
 
-    // for(let i = 0; i < data.length; i++) {
-    //   let Words = data[i].Words;
-    //   if(Words.length > 1) {
-    //   for(let j = 0; j < Words.length; j++) {
-    //     // If the word starts with "Q" and a number, skip to the next LineText
-    //     if(/^(Q\d+)/.test(Words[j].WordText)) {
-    //       break
-    //     }
-    //     if(/^(\d+)/.test(Words[j].WordText)) {
-    //       continue;
-    //     }
-    //     // Add the word to the current question
-    //     currentQuestion += Words[j].WordText + " ";
+    for(let i = 0; i < data.length; i++) {
+      let Words = data[i].Words;
+      if(Words.length > 1) {
+      for(let j = 0; j < Words.length; j++) {
+        // If the word starts with "Q" and a number, skip to the next LineText
+        if(/^(Q\d+)/.test(Words[j].WordText)) {
+          break
+        }
+        if(/^(\d+)/.test(Words[j].WordText)) {
+          continue;
+        }
+        // Add the word to the current question
+        currentQuestion += Words[j].WordText + " ";
 
-    //     // If the word is a ".", it's the end of the current question
-    //     if(Words[j].WordText === "." || Words[j].WordText === "?") {
-    //       // Add the current question to the list of questions
-    //       questions.push(currentQuestion.trim());
-    //       // Reset the current question
-    //       currentQuestion = "";
-    //       break; // Move to the next LineText
-    //     }
-    //   }
-    // }
-    // }
-    // console.log(questions);
-    // const updatedTestDetails = { ...testDetails, test_questions: [] , test_questions_no: questions.length , test_author: userEmail , test_sections: 1 , test_total_marks: 100 , test_duration: 1 };
-    // // console.log(updatedTestDetails);
+        // If the word is a ".", it's the end of the current question
+        if(Words[j].WordText === "." || Words[j].WordText === "?") {
+          // Add the current question to the list of questions
+          questions.push(currentQuestion.trim());
+          // Reset the current question
+          currentQuestion = "";
+          break; // Move to the next LineText
+        }
+      }
+    }
+    }
+    console.log(questions);
+    const updatedTestDetails = { ...testDetails, test_questions: [] , test_questions_no: questions.length , test_author: userEmail , test_sections: 1 , test_total_marks: 100 , test_duration: 1 };
+    // console.log(updatedTestDetails);
 
     
-    // // Create a new test entry
-    // const { data: testData, error: testError } = await supabase
-    //   .from('tests')
-    //   .insert([
-    //     { 
-    //       test_title: updatedTestDetails.test_title, 
-    //       test_duration: updatedTestDetails.test_duration, 
-    //       test_questions: updatedTestDetails.test_questions, 
-    //       test_total_marks: updatedTestDetails.test_total_marks, 
-    //       test_sections: updatedTestDetails.test_sections, 
-    //       test_question_no: updatedTestDetails.test_questions_no, 
-    //       test_author: updatedTestDetails.test_author 
-    //     }
-    //   ])
-    //   .select()
+    // Create a new test entry
+    const { data: testData, error: testError } = await supabase
+      .from('tests')
+      .insert([
+        { 
+          test_title: updatedTestDetails.test_title, 
+          test_duration: updatedTestDetails.test_duration, 
+          test_questions: updatedTestDetails.test_questions, 
+          test_total_marks: updatedTestDetails.test_total_marks, 
+          test_sections: updatedTestDetails.test_sections, 
+          test_question_no: updatedTestDetails.test_questions_no, 
+          test_author: updatedTestDetails.test_author 
+        }
+      ])
+      .select()
 
-    // if (testError) {
-    //   console.log(testError);
-    //   return;
-    // }
+    if (testError) {
+      console.log(testError);
+      return;
+    }
 
-    // const testId = testData[0].id;
+    const testId = testData[0].id;
 
-    // // Create a new question entry for each question
-    // for (let i = 0; i < questions.length; i++) {
-    //   const { error: questionError } = await supabase
-    //     .from('questions')
-    //     .insert([
-    //       { 
-    //         description: questions[i], 
-    //         test_id: testId, 
-    //         question_type: 'subjective' ,
-    //         question_mark : testDetails.test_total_marks/testDetails.test_questions_no
-    //       }
-    //     ])
+    // Create a new question entry for each question
+    for (let i = 0; i < questions.length; i++) {
+      const { error: questionError } = await supabase
+        .from('questions')
+        .insert([
+          { 
+            description: questions[i], 
+            test_id: testId, 
+            question_type: 'subjective' ,
+            question_mark : testDetails.test_total_marks/testDetails.test_questions_no
+          }
+        ])
         
 
-    //   if (questionError) {
-    //     console.log(questionError);
-    //     return;
-    //   }
-    // }
+      if (questionError) {
+        console.log(questionError);
+        return;
+      }
+    }
 
-    // // Update the test setdetails with the test id
-    // const temp = { ...testDetails, testId: testId };
-    // setTestDetails(temp);
-    // setTestArr([...testArr, testDetails]);
+    // Update the test setdetails with the test id
+    const temp = { ...testDetails, testId: testId };
+    setTestDetails(temp);
+    setTestArr([...testArr, testDetails]);
 
   
     }

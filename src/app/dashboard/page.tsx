@@ -51,6 +51,8 @@ export default function Dashboard() {
       .from('tests')
       .select('*')
       .in('id', attempted_tests)
+      
+      
   
     if (error) {
       console.error("Error fetching attempted tests: ", error);
