@@ -7,8 +7,8 @@
   - Abhishek Verma
   - Shubam Chaudhary
 
-## Demonstration Vedio
-  Link : [Vedio Demonstration](https://drive.google.com/file/d/1Gz3v1lt-oGaRAjuGxj5DQE7VfOC9C7d9/view?usp=sharing)
+## Demonstration Video
+  Link : [Video Demonstration](https://drive.google.com/file/d/1Gz3v1lt-oGaRAjuGxj5DQE7VfOC9C7d9/view?usp=sharing)
   
 
 ## Website Artifacts && Technical Overview
