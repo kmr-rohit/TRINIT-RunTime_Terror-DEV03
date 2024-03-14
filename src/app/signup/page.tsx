@@ -68,12 +68,38 @@ export default function SignUp() {
       return;
     }
   
-    const { user, error } = await supabase.auth.signUp({email, password});
-  
+    const { data: user, error } = await supabase.auth.signUp({email, password});
+    
+    console.log(user);
     if(error) {
       setAlert({ msg: error.message, type:"error" });
       return;
     }
+
+    // Add user to supabase database 
+    
+    console.log(name);
+    console.log(email);
+    const { data: userData , error: error2 } = await supabase
+    .from('users')
+    .insert([
+      {
+        id : user.user?.id,
+        user_name : name,
+        email : email,
+        attempted_tests : [],
+        published_tests : []
+      }
+    ])
+    .select()
+
+    console.log(userData);
+
+    if(error2){
+      setAlert({ msg: error2.message, type:"error" })
+    }
+
+        
   
     router.push('/login');
     setAlert({ msg: "Account Created Successfully", type:"info" });
